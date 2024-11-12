@@ -73,6 +73,7 @@ const TaskCard = ({
       localStorage.setItem("taskData", JSON.stringify(existingTasks));
       updatecards((prev) => !prev);
       setShowMenu(false);
+      toast.success("Task Completed !");
     }
   };
 
