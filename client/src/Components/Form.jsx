@@ -9,16 +9,24 @@ const Form = ({ closeForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = { title, description, dueDate, priority, iscompleted: false };
+    const id = Date.now();
+    const data = {
+      id,
+      title,
+      description,
+      dueDate,
+      priority,
+      iscompleted: false,
+    };
     const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
     existingTasks.push(data);
     localStorage.setItem("taskData", JSON.stringify(existingTasks));
     toast.success("Task Added Successfully !");
     closeForm(false);
   };
-
+  const today = new Date().toISOString().split("T")[0];
   return (
-    <div className="bg-white p-3 border-gray-500  border rounded-lg shadow-lg w-full max-w-md mx-auto mt-8">
+    <div className="bg-white p-3 border-gray-500  border rounded-l shadow-2xl w-full max-w-md mx-auto mt-8">
       <form onSubmit={handleSubmit}>
         {/* Title Field */}
         <div className="mb-3">
@@ -36,6 +44,7 @@ const Form = ({ closeForm }) => {
             required
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Enter Title"
+            maxLength={50}
           />
         </div>
 
@@ -55,15 +64,13 @@ const Form = ({ closeForm }) => {
             rows="2"
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Enter Description"
+            maxLength={120}
           />
         </div>
 
         {/* Due Date Field */}
         <div className="mb-4">
-          <label
-            htmlFor="dueDate"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="dueDate" className="block text-gray-700">
             Due Date
           </label>
           <input
@@ -71,8 +78,11 @@ const Form = ({ closeForm }) => {
             id="dueDate"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+            onFocus={(e) => e.target.showPicker()}
             required
+            min={today}
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            style={{ userSelect: "none" }}
           />
         </div>
 
@@ -100,7 +110,7 @@ const Form = ({ closeForm }) => {
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none transition-colors"
+            className="w-full bg-slate-900 text-white py-2 rounded-lg hover:bg-slate-700 focus:outline-none transition-colors"
           >
             Submit
           </button>

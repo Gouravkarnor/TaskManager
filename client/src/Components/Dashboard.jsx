@@ -24,12 +24,6 @@ const Dashboard = () => {
     const filtered1 = storedData
       .filter((task) => {
         // Combine the search filter conditions, ensuring `SearchbarInput` is used correctly.
-        console.log(
-          task.title.toLowerCase().includes(SearchbarInput.toLowerCase()) ||
-            task.description
-              .toLowerCase()
-              .includes(SearchbarInput.toLowerCase())
-        );
         if (SearchbarInput !== "") {
           return (
             task.title.toLowerCase().includes(SearchbarInput.toLowerCase()) ||
@@ -60,7 +54,6 @@ const Dashboard = () => {
       if (searchPriority === "Low Priority") return task.priority === "low";
       return true;
     });
-    console.log(filtered2);
     setFilteredData(filtered2);
   }, [
     FilterKey,
@@ -70,14 +63,13 @@ const Dashboard = () => {
     SearchbarInput,
     showupdateform,
   ]);
-  console.log("sss", FilteredData);
 
   return (
     <>
       <div className="relative mx-auto p-10 pt-2.5">
         {/* --------------Add button------------------ */}
         <div
-          className="flex items-center justify-center space-x-2 border bg-blue-900 border-white-600 text-white rounded-lg hover:bg-white hover:text-green-600 hover:border-4 hover:border-green-600 transition-colors cursor-pointer h-[40px] px-4 w-full md:w-4/5 lg:w-4/5 mx-auto select-none"
+          className="flex items-center justify-center space-x-2 border bg-slate-800 border-white-600 text-white rounded-lg hover:bg-white hover:text-slate-600 hover:border-4 hover:border-slate-600 transition-colors cursor-pointer h-[40px] px-4 w-full md:w-4/5 lg:w-4/5 mx-auto select-none"
           onClick={() => setShowform(!showform)}
         >
           {!showform ? (
@@ -106,9 +98,7 @@ const Dashboard = () => {
           setsearch={setSearchbarInput}
         />
         <HeadingCard />
-
         {/* -------------- filters -----------   */}
-
         {/* Form shown above background content */}
         {showform && (
           <div className=" absolute z-50 top-12 left-0 right-0 flex justify-center bg-white bg-opacity-70 mt-50">
@@ -136,7 +126,7 @@ const Dashboard = () => {
           }).map((item, index) => (
             <TaskCard
               key={index}
-              id={index}
+              id={item.id}
               title={item.title}
               priority={item.priority}
               description={item.description}

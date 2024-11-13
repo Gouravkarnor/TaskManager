@@ -51,7 +51,7 @@ const TaskCard = ({
   const deleteTask = (id) => {
     const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
     console.log(existingTasks);
-    const updatedTasks = existingTasks.filter((task, index) => index !== id);
+    const updatedTasks = existingTasks.filter((task, index) => task.id !== id);
     // Save the updated tasks array back to localStorage
     console.log(updatedTasks);
     localStorage.setItem("taskData", JSON.stringify(updatedTasks));
@@ -65,7 +65,7 @@ const TaskCard = ({
     const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
 
     // Find the task and mark it as completed
-    const taskIndex = existingTasks.findIndex((task, index) => index === id);
+    const taskIndex = existingTasks.findIndex((task, index) => task.id === id);
 
     if (taskIndex !== -1) {
       // Set the iscompleted flag to true
@@ -82,7 +82,7 @@ const TaskCard = ({
     const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
 
     // Find the task and mark it as completed
-    const taskIndex = existingTasks.findIndex((task, index) => index === id);
+    const taskIndex = existingTasks.findIndex((task, index) => task.id === id);
 
     if (taskIndex !== -1) {
       // Set the iscompleted flag to true
@@ -96,10 +96,10 @@ const TaskCard = ({
   };
 
   return (
-    <div className="relative w-full md:w-4/5 lg:w-4/5 mt-7 mx-auto bg-white shadow-lg rounded-lg overflow-visible">
+    <div className="relative w-full md:w-4/5 lg:w-4/5 mt-7 mx-auto border-2 rounded-lg bg-white shadow-lg  overflow-visible">
       <div className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 relative">
         {/* Left: Title, Priority, and Due Date */}
-        <h2 className="font-semibold text-gray-800 sm:text-sx md:text-sm lg:text-base xl:text-xl">
+        <h2 className="font-semibold text-slate-900 sm:text-sx md:text-sm lg:text-base xl:text-xl">
           {title}
         </h2>
         <div className="flex flex-row justify-between w-full sm:w-3/5">
@@ -166,6 +166,7 @@ const TaskCard = ({
       </div>
 
       {/* Description Section */}
+
       {showDescription && (
         <>
           <hr />

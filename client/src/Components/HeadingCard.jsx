@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 const HeadingCard = () => {
   return (
-    <div className="hidden lg:block relative w-full md:w-4/5 lg:w-4/5 mt-7 mx-auto bg-white shadow-lg rounded-lg overflow-visible">
+    <div className="hidden lg:block relative w-full md:w-4/5 lg:w-4/5 mt-7 mx-auto bg-slate-900 shadow-lg rounded-lg overflow-visible">
       <div className="p-2 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 relative">
         {/* Left: Title, Priority, and Due Date */}
-        <h2 className="ml-7 font-semibold text-gray-800 text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm">
+        <h2 className="ml-7 font-semibold text-white text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm">
           Title
         </h2>
         <div className="flex flex-row justify-between w-full sm:w-3/5">
-          <div className="font-semibold mt-2 sm:mt-0 px-1 py-1 rounded-full text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm text-gray-600">
+          <div className="font-semibold mt-2 sm:mt-0 px-1 py-1 rounded-full text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm text-white">
             Priority
           </div>
-          <div className="font-semibold mt-2 sm:mt-0 px-1 py-1 rounded-full text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm text-gray-600">
+          <div className="font-semibold mt-2 sm:mt-0 px-1 py-1 rounded-full text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm text-white">
             Status
           </div>
 
-          <p className="font-semibold mt-2 sm:mt-0 px-1 py-1 text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm">
+          <p className="font-semibold mt-2 sm:mt-0 px-1 py-1 text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm text-white">
             Due Date
           </p>
 

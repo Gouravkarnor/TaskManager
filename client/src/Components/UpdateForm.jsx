@@ -14,7 +14,9 @@ const UpdateForm = ({ closeForm, data }) => {
     let storedData = JSON.parse(localStorage.getItem("taskData")) || [];
 
     // Find the index of the item to update by matching data.id
-    const itemIndex = storedData.findIndex((item, index) => index === data.id);
+    const itemIndex = storedData.findIndex(
+      (item, index) => item.id === data.id
+    );
 
     if (itemIndex !== -1) {
       // Update the item with the new values from the state variables
@@ -36,7 +38,7 @@ const UpdateForm = ({ closeForm, data }) => {
     // Close the form
     closeForm(false);
   };
-
+  const today = new Date().toISOString().split("T")[0];
   return (
     <div className="bg-white p-3 border-gray-500  border rounded-lg shadow-lg w-full max-w-md mx-auto mt-5">
       <form onSubmit={handleSubmit}>
@@ -56,6 +58,7 @@ const UpdateForm = ({ closeForm, data }) => {
             required
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Enter Title"
+            maxLength={50}
           />
         </div>
 
@@ -75,15 +78,13 @@ const UpdateForm = ({ closeForm, data }) => {
             rows="2"
             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Enter Description"
+            maxLength={120}
           />
         </div>
 
         {/* Due Date Field */}
         <div className="mb-4">
-          <label
-            htmlFor="dueDate"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="dueDate" className="block text-gray-700">
             Due Date
           </label>
           <input
@@ -91,8 +92,12 @@ const UpdateForm = ({ closeForm, data }) => {
             id="dueDate"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+            onFocus={(e) => e.target.showPicker()}
             required
-            className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            min={today}
+            className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg
+          focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            style={{ userSelect: "none" }}
           />
         </div>
 
@@ -120,12 +125,12 @@ const UpdateForm = ({ closeForm, data }) => {
         <div className="flex justify-evenly mt-6 w-full">
           <button
             type="submit"
-            className="w-2/5 bg-blue-900 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none transition-colors"
+            className="w-2/5 bg-slate-900 text-white py-2 rounded-lg hover:bg-slate-600 focus:outline-none transition-colors"
           >
             Update Task
           </button>
           <button
-            className="w-2/5 bg-blue-900 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none transition-colors"
+            className="w-2/5 bg-slate-900 text-white py-2 rounded-lg hover:bg-slate-600 focus:outline-none transition-colors"
             onClick={() => closeForm(false)}
           >
             Close
