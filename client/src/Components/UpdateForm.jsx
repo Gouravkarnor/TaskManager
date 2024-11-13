@@ -1,24 +1,44 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-const Form = ({ closeForm }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [priority, setPriority] = useState("medium");
+const UpdateForm = ({ closeForm, data }) => {
+  const [title, setTitle] = useState(data.title);
+  const [description, setDescription] = useState(data.description);
+  const [dueDate, setDueDate] = useState(data.dueDate);
+  const [priority, setPriority] = useState(data.priority);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = { title, description, dueDate, priority, iscompleted: false };
-    const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
-    existingTasks.push(data);
-    localStorage.setItem("taskData", JSON.stringify(existingTasks));
-    toast.success("Task Added Successfully !");
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Retrieve and parse data from localStorage
+    let storedData = JSON.parse(localStorage.getItem("taskData")) || [];
+
+    // Find the index of the item to update by matching data.id
+    const itemIndex = storedData.findIndex((item, index) => index === data.id);
+
+    if (itemIndex !== -1) {
+      // Update the item with the new values from the state variables
+      storedData[itemIndex] = {
+        ...storedData[itemIndex],
+        title: title,
+        description: description,
+        dueDate: dueDate,
+        priority: priority,
+      };
+
+      // Save the updated data array back to localStorage
+      localStorage.setItem("taskData", JSON.stringify(storedData));
+      console.log("Updated data:", storedData[itemIndex]);
+    } else {
+      console.log("Item not found in localStorage");
+    }
+
+    // Close the form
     closeForm(false);
   };
 
   return (
-    <div className="bg-white p-3 border-gray-500  border rounded-lg shadow-lg w-full max-w-md mx-auto mt-8">
+    <div className="bg-white p-3 border-gray-500  border rounded-lg shadow-lg w-full max-w-md mx-auto mt-5">
       <form onSubmit={handleSubmit}>
         {/* Title Field */}
         <div className="mb-3">
@@ -97,12 +117,18 @@ const Form = ({ closeForm }) => {
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-evenly mt-6 w-full">
           <button
             type="submit"
-            className="w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none transition-colors"
+            className="w-2/5 bg-blue-900 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none transition-colors"
           >
-            Submit
+            Update Task
+          </button>
+          <button
+            className="w-2/5 bg-blue-900 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none transition-colors"
+            onClick={() => closeForm(false)}
+          >
+            Close
           </button>
         </div>
       </form>
@@ -110,4 +136,4 @@ const Form = ({ closeForm }) => {
   );
 };
 
-export default Form;
+export default UpdateForm;

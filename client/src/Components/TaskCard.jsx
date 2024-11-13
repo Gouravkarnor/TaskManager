@@ -8,6 +8,8 @@ const TaskCard = ({
   id,
   updatecards,
   completed,
+  showform,
+  formdata,
 }) => {
   const [showDescription, setShowDescription] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -33,18 +35,17 @@ const TaskCard = ({
     const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
 
     // Find index of the task to be updated
-    const taskIndex = existingTasks.findIndex((task) => task.id === id);
-
-    if (taskIndex !== -1) {
-      // Update the task with the new data
-      existingTasks[taskIndex] = {
-        ...existingTasks[taskIndex],
-        ...updatedData,
-      };
-
-      // Save the updated tasks array back to localStorage
-      localStorage.setItem("taskData", JSON.stringify(existingTasks));
-    }
+    // const taskIndex = existingTasks.findIndex((task) => task.id === id);
+    const data = {
+      id,
+      title,
+      description,
+      dueDate,
+      iscompleted: completed,
+      priority,
+    };
+    formdata(data);
+    showform((prev) => !prev);
   };
 
   const deleteTask = (id) => {
@@ -74,6 +75,23 @@ const TaskCard = ({
       updatecards((prev) => !prev);
       setShowMenu(false);
       toast.success("Task Completed !");
+    }
+  };
+  const setTaskNotCompleted = (id) => {
+    // Retrieve existing tasks from localStorage
+    const existingTasks = JSON.parse(localStorage.getItem("taskData")) || [];
+
+    // Find the task and mark it as completed
+    const taskIndex = existingTasks.findIndex((task, index) => index === id);
+
+    if (taskIndex !== -1) {
+      // Set the iscompleted flag to true
+      existingTasks[taskIndex].iscompleted = false;
+      // Save the updated tasks array back to localStorage
+      localStorage.setItem("taskData", JSON.stringify(existingTasks));
+      updatecards((prev) => !prev);
+      setShowMenu(false);
+      toast.success("Task Updated !");
     }
   };
 
@@ -135,9 +153,11 @@ const TaskCard = ({
                 </button>
                 <button
                   className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100 focus:outline-none text-xs sm:text-sx md:text-sm lg:text-sm xl:text-sm"
-                  onClick={() => setTaskCompleted(id)}
+                  onClick={() =>
+                    !completed ? setTaskCompleted(id) : setTaskNotCompleted(id)
+                  }
                 >
-                  Set Completed
+                  {!completed ? "Set Completed " : "Set Not Completed"}
                 </button>
               </div>
             )}

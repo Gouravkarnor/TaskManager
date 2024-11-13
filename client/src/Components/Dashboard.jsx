@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-
 import Form from "./Form";
 import TaskCard from "./TaskCard";
 import Nodatafoundcard from "./Nodatafoundcard";
 import SearchWithFilters from "./SearchWithFilters";
+import HeadingCard from "./HeadingCard";
+import UpdateForm from "./UpdateForm";
+
 const Dashboard = () => {
-  const [data, setData] = useState([]);
+  const [updatedata, setupdateData] = useState([]);
   const [updateui, setUpdateUi] = useState(false);
   const [showform, setShowform] = useState(false);
+  const [showupdateform, setShowupdateform] = useState(false);
   const [FilterKey, setFilterKey] = useState("Upcoming Tasks");
   const [searchPriority, setSearchedPriority] = useState("");
   const [FilteredData, setFilteredData] = useState();
   const [SearchbarInput, setSearchbarInput] = useState("");
-  console.log(SearchbarInput);
+
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("taskData")) || [];
     const today = new Date();
@@ -59,12 +62,19 @@ const Dashboard = () => {
     });
     console.log(filtered2);
     setFilteredData(filtered2);
-  }, [FilterKey, showform, updateui, searchPriority, SearchbarInput]);
+  }, [
+    FilterKey,
+    showform,
+    updateui,
+    searchPriority,
+    SearchbarInput,
+    showupdateform,
+  ]);
   console.log("sss", FilteredData);
 
   return (
     <>
-      <div className="relative mx-auto p-10 pt-7">
+      <div className="relative mx-auto p-10 pt-2.5">
         {/* --------------Add button------------------ */}
         <div
           className="flex items-center justify-center space-x-2 border bg-blue-900 border-white-600 text-white rounded-lg hover:bg-white hover:text-green-600 hover:border-4 hover:border-green-600 transition-colors cursor-pointer h-[40px] px-4 w-full md:w-4/5 lg:w-4/5 mx-auto select-none"
@@ -95,18 +105,35 @@ const Dashboard = () => {
           setPriority={setSearchedPriority}
           setsearch={setSearchbarInput}
         />
+        <HeadingCard />
 
         {/* -------------- filters -----------   */}
 
         {/* Form shown above background content */}
         {showform && (
-          <div className="absolute z-50 top-13 left-0 right-0 flex justify-center  bg-white bg-opacity-70">
+          <div className=" absolute z-50 top-12 left-0 right-0 flex justify-center bg-white bg-opacity-70 mt-50">
             <Form closeForm={setShowform} />
           </div>
         )}
-
+        {showupdateform && (
+          <div className="absolute z-50 top-12 left-0 right-0 flex justify-center mt-50 bg-white bg-opacity-70">
+            <UpdateForm closeForm={setShowupdateform} data={updatedata} />
+          </div>
+        )}
         {FilteredData?.length ? (
-          FilteredData.map((item, index) => (
+          FilteredData.sort((a, b) => {
+            // Convert dueDate to Date objects for comparison
+            const dateA = new Date(a.dueDate);
+            const dateB = new Date(b.dueDate);
+
+            // Compare due dates
+            if (dateA < dateB) return -1;
+            if (dateA > dateB) return 1;
+
+            // If due dates are the same, sort by priority
+            const priorityOrder = { high: 1, medium: 2, low: 3 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+          }).map((item, index) => (
             <TaskCard
               key={index}
               id={index}
@@ -116,6 +143,8 @@ const Dashboard = () => {
               dueDate={item.dueDate}
               updatecards={setUpdateUi}
               completed={item.iscompleted}
+              showform={setShowupdateform}
+              formdata={setupdateData}
             />
           ))
         ) : (
